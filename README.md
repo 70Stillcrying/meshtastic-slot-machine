@@ -85,6 +85,7 @@ pip install flask flask-cors meshtastic
 
 ```bash
 npm install
+npm install --legacy-peer-deps
 ```
 
 ### 4\. Start the backend server
@@ -177,8 +178,8 @@ Resets the system state, clearing all participants, draw results, and stopping a
 }
 ```
 ## run time show
-![](https://pic1.imgdb.cn/item/684a4a7758cb8da5c8469492.png)
 
+![](https://pic1.imgdb.cn/item/684a4f1358cb8da5c8469674.png)
 ## 🤝 Contribution Guidelines
 
 Contributions are welcome\!

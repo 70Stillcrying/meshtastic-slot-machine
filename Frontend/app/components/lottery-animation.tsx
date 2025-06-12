@@ -7,7 +7,7 @@ export default function LotteryAnimation() {
       <Card className="w-96 mx-4">
         <CardContent className="text-center py-12">
           <div className="space-y-6">
-            {/* 动画图标 */}
+            {/* Animation Icons */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center justify-center">
                 <Sparkles className="h-16 w-16 text-yellow-500 animate-pulse" />
@@ -17,13 +17,13 @@ export default function LotteryAnimation() {
               </div>
             </div>
 
-            {/* 抽奖文字 */}
+            {/* Lottery Text */}
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold text-gray-900">🎲 正在抽奖中...</h3>
-              <p className="text-gray-600">请稍候，系统正在随机选择幸运儿</p>
+              <h3 className="text-2xl font-bold text-gray-900">🎲 Drawing in progress...</h3>
+              <p className="text-gray-600">Please wait, the system is randomly selecting lucky winners</p>
             </div>
 
-            {/* 动画效果 */}
+            {/* Animation Effects */}
             <div className="flex justify-center space-x-2">
               {[...Array(3)].map((_, i) => (
                 <div
@@ -37,7 +37,7 @@ export default function LotteryAnimation() {
               ))}
             </div>
 
-            {/* 闪电效果 */}
+            {/* Lightning Effect */}
             <div className="flex justify-center">
               <Zap className="h-8 w-8 text-yellow-500 animate-pulse" />
             </div>

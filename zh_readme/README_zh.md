@@ -75,6 +75,7 @@ pip install flask flask-cors meshtastic
 ### 3. 安装前端依赖
 ```bash
 npm install
+npm install --legacy-peer-deps
 ```
 
 ### 4. 启动后端服务器

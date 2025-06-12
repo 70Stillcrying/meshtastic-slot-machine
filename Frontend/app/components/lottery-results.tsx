@@ -21,35 +21,38 @@ interface LotteryResultsProps {
 
 export default function LotteryResults({ winners, onReset }: LotteryResultsProps) {
   const getPrizeIcon = (prizeName: string) => {
-    if (prizeName.includes("一等奖")) return <Crown className="h-8 w-8 text-yellow-500" />
-    if (prizeName.includes("二等奖")) return <Medal className="h-8 w-8 text-gray-400" />
-    if (prizeName.includes("三等奖")) return <Award className="h-8 w-8 text-amber-600" />
+    if (prizeName.includes("First Prize") || prizeName.includes("一等奖"))
+      return <Crown className="h-8 w-8 text-yellow-500" />
+    if (prizeName.includes("Second Prize") || prizeName.includes("二等奖"))
+      return <Medal className="h-8 w-8 text-gray-400" />
+    if (prizeName.includes("Third Prize") || prizeName.includes("三等奖"))
+      return <Award className="h-8 w-8 text-amber-600" />
     return <Trophy className="h-8 w-8" />
   }
 
   const getPrizeColor = (prizeName: string) => {
-    if (prizeName.includes("一等奖")) return "from-yellow-400 to-yellow-600"
-    if (prizeName.includes("二等奖")) return "from-gray-300 to-gray-500"
-    if (prizeName.includes("三等奖")) return "from-amber-400 to-amber-600"
+    if (prizeName.includes("First Prize") || prizeName.includes("一等奖")) return "from-yellow-400 to-yellow-600"
+    if (prizeName.includes("Second Prize") || prizeName.includes("二等奖")) return "from-gray-300 to-gray-500"
+    if (prizeName.includes("Third Prize") || prizeName.includes("三等奖")) return "from-amber-400 to-amber-600"
     return "from-purple-400 to-purple-600"
   }
 
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-1000">
-      {/* 结果标题 */}
+      {/* Results Title */}
       <div className="text-center">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Sparkles className="h-8 w-8 text-yellow-500" />
-          <h2 className="text-3xl font-bold text-gray-900">🎉 抽奖结果 🎉</h2>
+          <h2 className="text-3xl font-bold text-gray-900">🎉 Lottery Results 🎉</h2>
           <Sparkles className="h-8 w-8 text-yellow-500" />
         </div>
         <Button onClick={onReset} variant="outline" className="mb-6">
           <RotateCcw className="h-4 w-4 mr-2" />
-          返回主页
+          Back to Home
         </Button>
       </div>
 
-      {/* 获奖结果 */}
+      {/* Winners Results */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Object.entries(winners).map(([prizeName, prizeWinners]) => (
           <Card key={prizeName} className="overflow-hidden">
@@ -58,13 +61,13 @@ export default function LotteryResults({ winners, onReset }: LotteryResultsProps
                 {getPrizeIcon(prizeName)}
                 <div>
                   <div className="text-xl font-bold">{prizeName}</div>
-                  <div className="text-sm opacity-90">{prizeWinners.length} 名获奖者</div>
+                  <div className="text-sm opacity-90">{prizeWinners.length} winners</div>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               {prizeWinners.length === 0 ? (
-                <div className="p-6 text-center text-gray-500">暂无获奖者</div>
+                <div className="p-6 text-center text-gray-500">No winners</div>
               ) : (
                 <div className="space-y-0">
                   {prizeWinners.map((winner, index) => (
@@ -96,12 +99,12 @@ export default function LotteryResults({ winners, onReset }: LotteryResultsProps
         ))}
       </div>
 
-      {/* 祝贺信息 */}
+      {/* Congratulations Message */}
       <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
         <CardContent className="text-center py-8">
           <div className="text-4xl mb-4">🎊🎉🎊</div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">恭喜所有获奖者！</h3>
-          <p className="text-gray-600">感谢大家参与本次 Meshtastic 抽奖活动</p>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Congratulations to all winners!</h3>
+          <p className="text-gray-600">Thank you for participating in this Meshtastic lottery event</p>
         </CardContent>
       </Card>
     </div>

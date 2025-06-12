@@ -35,7 +35,7 @@ interface StatusData {
 export default function LotteryPage() {
   const [participants, setParticipants] = useState<Participant[]>([])
   const [participantCount, setParticipantCount] = useState(0)
-  const [keyword, setKeyword] = useState("我要抽奖")
+  const [keyword, setKeyword] = useState("I want to join lottery")
   const [prizes, setPrizes] = useState<PrizeLevel>({})
   const [isDrawing, setIsDrawing] = useState(false)
   const [winners, setWinners] = useState<Winners | null>(null)
@@ -44,14 +44,14 @@ export default function LotteryPage() {
   const [lastUpdate, setLastUpdate] = useState(0)
   const [isPolling, setIsPolling] = useState(false)
 
-  // 后端 API 地址
+  // Backend API URL
   const API_BASE_URL = "http://127.0.0.1:5000"
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // 获取状态数据
+  // Fetch status data
   const fetchStatus = useCallback(async () => {
     if (!mounted) return
 
@@ -65,12 +65,12 @@ export default function LotteryPage() {
 
       const data: StatusData = await response.json()
 
-      // 只有当有更新时才更新状态
+      // Only update state when there are updates
       if (data.lastUpdate !== lastUpdate) {
-        console.log("📊 收到状态更新:", data)
+        console.log("📊 Received status update:", data)
         setParticipants(data.participants || [])
         setParticipantCount(data.participantCount || 0)
-        setKeyword(data.keyword || "我要抽奖")
+        setKeyword(data.keyword || "I want to join lottery")
         setPrizes(data.prizes || {})
         setIsDrawing(data.inProgress)
 
@@ -82,43 +82,43 @@ export default function LotteryPage() {
         setConnectionStatus("connected")
       }
     } catch (error) {
-      console.error("❌ 获取状态失败:", error)
+      console.error("❌ Failed to fetch status:", error)
       setConnectionStatus("disconnected")
     } finally {
       setIsPolling(false)
     }
   }, [mounted, lastUpdate, API_BASE_URL])
 
-  // 定期轮询状态
+  // Regular polling for status
   useEffect(() => {
     if (!mounted) return
 
-    console.log("🔄 启动 HTTP 轮询...")
+    console.log("🔄 Starting HTTP polling...")
 
-    // 立即获取一次状态
+    // Fetch status immediately
     fetchStatus()
 
-    // 设置轮询间隔
+    // Set polling interval
     const intervalId = setInterval(() => {
       if (!isPolling) {
         fetchStatus()
       }
-    }, 1000) // 每秒轮询一次
+    }, 1000) // Poll every second
 
     return () => {
       clearInterval(intervalId)
     }
   }, [mounted, fetchStatus, isPolling])
 
-  // 触发抽奖
+  // Trigger lottery
   const triggerLottery = async () => {
     try {
       if (participantCount === 0) {
-        console.warn("无法触发抽奖: 无参与者")
+        console.warn("Cannot trigger lottery: no participants")
         return
       }
 
-      console.log("🎯 触发抽奖")
+      console.log("🎯 Triggering lottery")
       setIsDrawing(true)
 
       const response = await fetch(`${API_BASE_URL}/trigger-draw`, {
@@ -130,17 +130,17 @@ export default function LotteryPage() {
         throw new Error(errorData.error || `HTTP error! Status: ${response.status}`)
       }
 
-      // 抽奖已开始，状态将通过轮询更新
+      // Lottery has started, status will be updated through polling
     } catch (error) {
-      console.error("触发抽奖时出错:", error)
+      console.error("Error triggering lottery:", error)
       setIsDrawing(false)
     }
   }
 
-  // 重置抽奖
+  // Reset lottery
   const resetLottery = async () => {
     try {
-      console.log("🔄 重置抽奖")
+      console.log("🔄 Resetting lottery")
 
       const response = await fetch(`${API_BASE_URL}/reset`, {
         method: "POST",
@@ -153,33 +153,36 @@ export default function LotteryPage() {
       setWinners(null)
       setIsDrawing(false)
 
-      // 立即获取最新状态
+      // Fetch latest status immediately
       fetchStatus()
     } catch (error) {
-      console.error("重置抽奖时出错:", error)
+      console.error("Error resetting lottery:", error)
     }
   }
 
-  // 手动刷新状态
+  // Manual refresh status
   const refreshStatus = () => {
-    console.log("🔄 手动刷新状态")
+    console.log("🔄 Manually refreshing status")
     fetchStatus()
   }
 
   const getPrizeIcon = (prizeName: string) => {
-    if (prizeName.includes("一等奖")) return <Crown className="h-6 w-6 text-yellow-500" />
-    if (prizeName.includes("二等奖")) return <Medal className="h-6 w-6 text-gray-400" />
-    if (prizeName.includes("三等奖")) return <Award className="h-6 w-6 text-amber-600" />
+    if (prizeName.includes("First Prize") || prizeName.includes("一等奖"))
+      return <Crown className="h-6 w-6 text-yellow-500" />
+    if (prizeName.includes("Second Prize") || prizeName.includes("二等奖"))
+      return <Medal className="h-6 w-6 text-gray-400" />
+    if (prizeName.includes("Third Prize") || prizeName.includes("三等奖"))
+      return <Award className="h-6 w-6 text-amber-600" />
     return <Trophy className="h-6 w-6" />
   }
 
-  // 防止服务端渲染不匹配
+  // Prevent server-side rendering mismatch
   if (!mounted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">正在加载抽奖系统...</p>
+          <p className="text-gray-600">Loading lottery system...</p>
         </div>
       </div>
     )
@@ -188,11 +191,11 @@ export default function LotteryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* 头部 */}
+        {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">🎉 Meshtastic 多等级抽奖系统</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">🎉 Meshtastic Multi-Level Lottery System</h1>
           <p className="text-gray-600">
-            发送 "<span className="font-semibold text-purple-600">{keyword}</span>" 参与抽奖
+            Send "<span className="font-semibold text-purple-600">{keyword}</span>" to participate in lottery
           </p>
           <div className="flex items-center justify-center gap-4 mt-4">
             <div className="flex items-center gap-2">
@@ -213,70 +216,70 @@ export default function LotteryPage() {
                 }`}
               >
                 {connectionStatus === "connected"
-                  ? "已连接"
+                  ? "Connected"
                   : connectionStatus === "connecting"
-                    ? "连接中..."
-                    : "连接断开"}
+                    ? "Connecting..."
+                    : "Disconnected"}
               </span>
             </div>
             {connectionStatus === "connected" && (
               <Button onClick={refreshStatus} size="sm" variant="outline">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                刷新状态
+                Refresh Status
               </Button>
             )}
           </div>
         </div>
 
-        {/* 连接状态提示 */}
+        {/* Connection Status Alert */}
         {connectionStatus === "disconnected" && (
           <Card className="mb-6 border-red-200 bg-red-50">
             <CardContent className="pt-6">
               <div className="text-center text-red-600">
                 <WifiOff className="h-8 w-8 mx-auto mb-2" />
-                <p className="font-medium">无法连接到后端服务器</p>
-                <p className="text-sm mt-1">请确保后端服务器正在运行在 http://127.0.0.1:5000</p>
+                <p className="font-medium">Unable to connect to backend server</p>
+                <p className="text-sm mt-1">Please ensure the backend server is running at http://127.0.0.1:5000</p>
                 <Button onClick={() => window.location.reload()} className="mt-3" size="sm">
-                  刷新页面
+                  Refresh Page
                 </Button>
               </div>
             </CardContent>
           </Card>
         )}
 
-        {/* 抽奖动画 */}
+        {/* Lottery Animation */}
         {isDrawing && <LotteryAnimation />}
 
-        {/* 抽奖结果 */}
+        {/* Lottery Results */}
         {winners && <LotteryResults winners={winners} onReset={resetLottery} />}
 
-        {/* 主要内容 */}
+        {/* Main Content */}
         {!isDrawing && !winners && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* 左侧：统计信息 */}
+            {/* Left: Statistics */}
             <div className="lg:col-span-1 space-y-6">
-              {/* 参与者统计 */}
+              {/* Participant Statistics */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5" />
-                    参与统计
+                    Participation Stats
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-purple-600 mb-2">{participantCount}</div>
-                    <p className="text-gray-600">当前参与人数</p>
+                    <p className="text-gray-600">Current participants</p>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* 奖项设置 */}
+              {/* Prize Settings */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Trophy className="h-5 w-5" />
-                    奖项设置
+                    Prize Settings
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -286,13 +289,13 @@ export default function LotteryPage() {
                         {getPrizeIcon(prizeName)}
                         <span className="font-medium">{prizeName}</span>
                       </div>
-                      <Badge variant="secondary">{count} 名</Badge>
+                      <Badge variant="secondary">{count} winners</Badge>
                     </div>
                   ))}
                 </CardContent>
               </Card>
 
-              {/* 抽奖按钮 */}
+              {/* Lottery Button */}
               <Card>
                 <CardContent className="pt-6">
                   <Button
@@ -302,19 +305,21 @@ export default function LotteryPage() {
                   >
                     <Zap className="h-5 w-5 mr-2" />
                     {connectionStatus !== "connected"
-                      ? "等待连接..."
+                      ? "Waiting for connection..."
                       : participantCount === 0
-                        ? "等待参与者..."
-                        : "开始抽奖"}
+                        ? "Waiting for participants..."
+                        : "Start Lottery"}
                   </Button>
                   {participantCount === 0 && connectionStatus === "connected" && (
-                    <p className="text-sm text-gray-500 text-center mt-2">请等待用户发送 "{keyword}" 参与抽奖</p>
+                    <p className="text-sm text-gray-500 text-center mt-2">
+                      Please wait for users to send "{keyword}" to participate in lottery
+                    </p>
                   )}
                 </CardContent>
               </Card>
             </div>
 
-            {/* 右侧：参与者列表 */}
+            {/* Right: Participants List */}
             <div className="lg:col-span-2">
               <ParticipantsList participants={participants} />
             </div>

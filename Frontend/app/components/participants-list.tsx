@@ -17,9 +17,9 @@ export default function ParticipantsList({ participants }: ParticipantsListProps
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="h-5 w-5" />
-          参与者名单
+          Participants List
           <Badge variant="outline" className="ml-auto">
-            {participants.length} 人
+            {participants.length} people
           </Badge>
         </CardTitle>
       </CardHeader>
@@ -27,8 +27,8 @@ export default function ParticipantsList({ participants }: ParticipantsListProps
         {participants.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>暂无参与者</p>
-            <p className="text-sm mt-1">等待用户发送抽奖关键词...</p>
+            <p>No participants yet</p>
+            <p className="text-sm mt-1">Waiting for users to send lottery keyword...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
