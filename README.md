@@ -1,7 +1,7 @@
 # Meshtastic Lottery System
 
 A real-time lottery system based on the Meshtastic network, which supports automatic device detection and fair prize drawing.
-![](https://pic1.imgdb.cn/item/684a487858cb8da5c846941d.jpg)
+![](https://filesystem.site/cdn/20250614/6PKZuZtSTTelG8N4FOed7ZHshVlQEg.png)
 ## 🌟 Features
 
   - **Automatic Entry** - Automatically join the lottery pool by sending a specific keyword over the Meshtastic network.
